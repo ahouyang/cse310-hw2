@@ -56,8 +56,8 @@ def verbose_ping(dest_addr, timeout, tries):
             print('failed. (timeout within {} seconds)'.format(timeout))
     min_rtt = min(times) if len(times) != 0 else 0
     max_rtt = max(times) if len(times) != 0 else 0
-    mean = round(statistics.mean(times),4)
-    stdev = round(statistics.stdev(times), 4)
+    mean = round(statistics.mean(times),4) if len(times) != 0 else 0
+    stdev = round(statistics.stdev(times), 4) if len(times) != 0 else 0
     print('packets lost: {}, min: {}ms, max: {}ms, mean: {}ms, stdev: {}ms'.format(lost, min_rtt,
             max_rtt, mean, stdev))
 
@@ -85,4 +85,4 @@ def checksum(source_string):
 
 
 if __name__ == '__main__':
-    verbose_ping(sys.argv[1], timeout=2, tries=10)
+    verbose_ping(sys.argv[1], timeout=1, tries=5)
