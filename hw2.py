@@ -1,3 +1,6 @@
+# Andy Ouyang: 110952125
+# Nick Tessier: 111081497
+
 import socket
 import sys
 import struct
@@ -36,25 +39,27 @@ def verbose_ping(dest_addr, timeout, tries):
         packet = packet[last_byte:]
         ready_socket = select.select([sock], [], [], timeout)
         if ready_socket[0]:
+            # print("ping successful")
             response = sock.recv(1024)
             rec_time = time.time()
             rtt = round((rec_time - send_time) * 1000.0, 4)
+            # print(rtt)
             times.append(rtt)
         else:
             rtt = None
             lost += 1
         # print(response)
         # print(rec_time)
-        if rtt:
+        if rtt is not None:
             print('get ping in {} milliseconds'.format(rtt))
         else:
-            print('failed. (timeout within {} seconds'.format(timeout))
-    min_rtt = min(times)
-    max_rtt = max(times)
+            print('failed. (timeout within {} seconds)'.format(timeout))
+    min_rtt = min(times) if len(times) != 0 else 0
+    max_rtt = max(times) if len(times) != 0 else 0
     mean = round(statistics.mean(times),4)
     stdev = round(statistics.stdev(times), 4)
     print('packets lost: {}, min: {}ms, max: {}ms, mean: {}ms, stdev: {}ms'.format(lost, min_rtt,
-			max_rtt, mean, stdev))
+            max_rtt, mean, stdev))
 
 
 def checksum(source_string):
